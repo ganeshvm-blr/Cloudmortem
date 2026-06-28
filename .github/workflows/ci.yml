@@ -1,0 +1,50 @@
+name: CloudMortem CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Python syntax validation
+        run: |
+          python -m compileall terraform/infrastructure/lambda_src
+
+      - name: Run Python tests
+        run: |
+          python tests/test_diff.py
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform format check
+        run: |
+          terraform fmt -check -recursive terraform
+
+      - name: Terraform validate bootstrap
+        working-directory: terraform/bootstrap
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+      - name: Terraform validate infrastructure
+        working-directory: terraform/infrastructure
+        run: |
+          terraform init -backend=false
+          terraform validate
