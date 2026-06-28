@@ -11,32 +11,38 @@ sys.path.append(
 )
 
 from aws_inventory.diff import compare_snapshots
-from aws_inventory.diff import compare_snapshots
 
 
-old = {
-    "resources": {
-        "s3": [
-            {"name": "old-bucket"}
-        ],
-        "lambda": [],
-        "ec2": []
+def test_detect_created_resource():
+    old = {
+        "resources": {
+            "s3": [
+                {"name": "old-bucket"}
+            ],
+            "lambda": [],
+            "ec2": []
+        }
     }
-}
 
-
-new = {
-    "resources": {
-        "s3": [
-            {"name": "old-bucket"},
-            {"name": "new-bucket"}
-        ],
-        "lambda": [],
-        "ec2": []
+    new = {
+        "resources": {
+            "s3": [
+                {"name": "old-bucket"},
+                {"name": "new-bucket"}
+            ],
+            "lambda": [],
+            "ec2": []
+        }
     }
-}
 
+    result = compare_snapshots(old, new)
 
-result = compare_snapshots(old, new)
+    assert result["created"] == [
+        {
+            "service": "s3",
+            "resource": "new-bucket"
+        }
+    ]
 
-print(result)
+    assert result["deleted"] == []
+    assert result["modified"] == []
