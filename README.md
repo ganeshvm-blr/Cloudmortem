@@ -53,6 +53,32 @@ Describe APIs    ListFunctions      ListBuckets
                         v
           Created / Deleted / Modified Resources
 
+## Example Drift Detection Output
+
+CloudMortem identifies infrastructure changes by comparing inventory snapshots.
+
+Example: A new S3 bucket was created outside the expected infrastructure workflow.
+
+Detected change:
+
+```json
+{
+  "changes": {
+    "created": [
+      {
+        "service": "s3",
+        "resource": "cloudmortem-drift-test-716215155311"
+      }
+    ],
+    "deleted": [],
+    "modified": []
+  }
+}
+```
+
+The detection confirms that CloudMortem can identify resources that appear in the AWS environment after the previous inventory snapshot was captured.
+
+
 ## Tech Stack
 
 - AWS Lambda
