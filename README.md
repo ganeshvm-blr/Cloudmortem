@@ -62,6 +62,33 @@ Describe APIs    ListFunctions      ListBuckets
 - IAM
 - EventBridge
 
+## CI/CD Workflow
+
+CloudMortem uses GitHub Actions to automatically validate application and infrastructure changes.
+
+Current pipeline:
+
+Developer
+|
+|
+Git Push
+|
+|
+GitHub Actions
+|
++-- Python syntax validation
+|
++-- Python tests
+|
++-- Terraform formatting check
+|
++-- Terraform validation
+
+
+The validation pipeline helps prevent invalid application changes and Terraform configuration issues from reaching deployment stages.
+
+Future improvements include adding Terraform plan generation and controlled deployment workflows with manual approval gates.
+
 ## Status
 
 MVP complete.
