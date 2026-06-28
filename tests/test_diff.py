@@ -46,3 +46,35 @@ def test_detect_created_resource():
 
     assert result["deleted"] == []
     assert result["modified"] == []
+
+
+def test_detect_deleted_resource():
+    old = {
+        "resources": {
+            "s3": [
+                {"name": "deleted-bucket"}
+            ],
+            "lambda": [],
+            "ec2": []
+        }
+    }
+
+    new = {
+        "resources": {
+            "s3": [],
+            "lambda": [],
+            "ec2": []
+        }
+    }
+
+    result = compare_snapshots(old, new)
+
+    assert result["deleted"] == [
+        {
+            "service": "s3",
+            "resource": "deleted-bucket"
+        }
+    ]
+
+    assert result["created"] == []
+    assert result["modified"] == []
