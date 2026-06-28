@@ -73,3 +73,76 @@ resource "aws_iam_role_policy" "inventory_discovery" {
   policy = data.aws_iam_policy_document.inventory_discovery.json
 }
 
+# GitHub Actions OIDC Provider
+
+resource "aws_iam_openid_connect_provider" "github_actions" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com"
+  ]
+
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1"
+  ]
+}
+
+
+# Terraform Plan Role
+
+resource "aws_iam_role" "terraform_plan_role" {
+
+  name = "${local.name_prefix}-terraform-plan-role"
+
+  assume_role_policy = jsonencode({
+
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+
+        Action = "sts:AssumeRoleWithWebIdentity"
+
+        Condition = {
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = "repo:ganeshvm-blr/Cloudmortem:*"
+          }
+        }
+      }
+    ]
+
+  })
+}
+# Terraform Plan Permissions
+
+resource "aws_iam_role_policy" "terraform_plan_policy" {
+
+  name = "${local.name_prefix}-terraform-plan-policy"
+
+  role = aws_iam_role.terraform_plan_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:*",
+          "dynamodb:*",
+          "ec2:Describe*",
+          "lambda:List*",
+          "lambda:Get*"
+        ]
+
+        Resource = "*"
+      }
+    ]
+  })
+}
