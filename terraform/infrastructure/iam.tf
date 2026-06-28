@@ -137,10 +137,12 @@ resource "aws_iam_role_policy" "terraform_plan_policy" {
           "s3:*",
           "dynamodb:*",
           "ec2:Describe*",
-          "lambda:List*",
-          "lambda:Get*"
+          "lambda:*",
+          "logs:*",
+          "events:*",
+          "iam:Get*",
+          "iam:List*"
         ]
-
         Resource = "*"
       }
     ]
