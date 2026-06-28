@@ -129,6 +129,43 @@ CloudMortem/
         └── Reusable Terraform modules
 ```
 
+## Design Decisions
+
+### Snapshot-Based Drift Detection
+
+CloudMortem uses a snapshot comparison model rather than directly evaluating changes against live AWS resources.
+
+Each execution:
+- Collects the current AWS inventory.
+- Stores the inventory snapshot in Amazon S3.
+- Compares the current snapshot against the previous snapshot.
+- Reports created, deleted, and modified resources.
+
+This approach keeps inventory collection, storage, and comparison logic separated, making the system easier to test and extend.
+
+### Serverless Architecture
+
+CloudMortem uses AWS Lambda with EventBridge scheduling because the workload is periodic and event-driven.
+
+This avoids maintaining continuously running infrastructure while providing automatic execution when inventory scans are required.
+
+### Infrastructure as Code
+
+Terraform manages CloudMortem infrastructure to provide:
+- Repeatable deployments.
+- Version-controlled infrastructure changes.
+- Automated validation through GitHub Actions.
+
+### IAM Least Privilege
+
+CloudMortem uses IAM roles and policies to control Lambda permissions required for AWS inventory collection.
+
+Permissions are designed around the principle of granting only the access required for resource discovery while avoiding unnecessary privileges.
+
+### Storage Design
+
+Amazon S3 is used for inventory snapshot storage because snapshots are historical records that require durable, low-cost storage rather than frequent transactional updates.
+
 ## Status
 
 MVP complete.
