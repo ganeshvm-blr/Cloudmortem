@@ -1,3 +1,16 @@
+import sys
+from pathlib import Path
+
+sys.path.append(
+    str(
+        Path(__file__).resolve().parents[1]
+        / "terraform"
+        / "infrastructure"
+        / "lambda_src"
+    )
+)
+
+from aws_inventory.diff import compare_snapshots
 from aws_inventory.diff import compare_snapshots
 
 
