@@ -89,6 +89,46 @@ The validation pipeline helps prevent invalid application changes and Terraform 
 
 Future improvements include adding Terraform plan generation and controlled deployment workflows with manual approval gates.
 
+
+## Repository Structure
+
+```text
+CloudMortem/
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── COST_ANALYSIS.md
+│   ├── DECISIONS.md
+│   ├── FAILURE_SCENARIOS.md
+│   ├── INTERVIEW_NOTES.md
+│   └── LESSONS_LEARNED.md
+│
+├── scripts/
+│   └── Utility scripts
+│
+├── src/
+│   └── Reserved for future application source separation
+│
+├── tests/
+│   └── test_diff.py
+│
+└── terraform/
+    ├── bootstrap/
+    │   └── Terraform backend setup
+    │
+    ├── environments/
+    │   └── Environment-specific configuration
+    │
+    ├── infrastructure/
+    │   ├── AWS resource definitions
+    │   ├── Lambda deployment configuration
+    │   ├── EventBridge scheduling
+    │   ├── IAM policies and roles
+    │   └── S3 snapshot storage
+    │
+    └── modules/
+        └── Reusable Terraform modules
+```
+
 ## Status
 
 MVP complete.
