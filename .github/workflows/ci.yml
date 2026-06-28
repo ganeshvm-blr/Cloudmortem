@@ -63,3 +63,9 @@ jobs:
         run: |
           terraform init -backend=false
           terraform validate
+
+      - name: Terraform plan
+        working-directory: terraform/infrastructure
+        run: |
+          terraform init
+          terraform plan -out=tfplan
