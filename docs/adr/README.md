@@ -11,6 +11,7 @@ the reasoning behind them, alternatives considered, and long-term consequences.
 | ADR-002 | Use GitHub Actions OIDC Authentication        | Accepted |
 | ADR-003 | Separate Terraform Plan and Apply Stages      | Accepted |
 | ADR-004 | Store Immutable Deployment Artifacts          | Accepted |
+| ADR-005 | Infrastructure Security Scanning Strategy     | Accepted |
 
 ## Proposed ADRs
 
