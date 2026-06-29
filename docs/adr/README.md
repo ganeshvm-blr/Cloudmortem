@@ -12,6 +12,7 @@ the reasoning behind them, alternatives considered, and long-term consequences.
 | ADR-003 | Separate Terraform Plan and Apply Stages      | Accepted |
 | ADR-004 | Store Immutable Deployment Artifacts          | Accepted |
 | ADR-005 | Infrastructure Security Scanning Strategy     | Accepted |
+| ADR-006 | Deployment Concurrency Protection             | Accepted |
 
 ## Proposed ADRs
 
