@@ -80,3 +80,12 @@ jobs:
         with:
           name: terraform-plan
           path: terraform/infrastructure/tfplan.txt
+
+  apply:
+    needs: validate
+    environment: production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
