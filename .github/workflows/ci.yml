@@ -95,3 +95,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download Terraform plan
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan-binary
+          path: terraform/infrastructure
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::716215155311:role/cloudmortem-dev-terraform-plan-role
+          aws-region: ap-south-1
+
+      - name: Terraform apply
+        working-directory: terraform/infrastructure
+        run: |
+          terraform init
+          terraform apply tfplan
