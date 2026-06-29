@@ -64,6 +64,14 @@ jobs:
           terraform init -backend=false
           terraform validate
 
+      - name: Install Checkov
+        run: |
+          pip install checkov
+
+      - name: Run Checkov Terraform security scan
+        run: |
+          checkov -d terraform --soft-fail
+
       - name: Terraform plan
         working-directory: terraform/infrastructure
         run: |
