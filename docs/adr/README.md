@@ -10,6 +10,7 @@ the reasoning behind them, alternatives considered, and long-term consequences.
 | ADR-001 | Use Terraform for Infrastructure Management   | Accepted |
 | ADR-002 | Use GitHub Actions OIDC Authentication        | Accepted |
 | ADR-003 | Separate Terraform Plan and Apply Stages      | Accepted |
+| ADR-004 | Store Immutable Deployment Artifacts          | Accepted |
 
 ## Proposed ADRs
 
