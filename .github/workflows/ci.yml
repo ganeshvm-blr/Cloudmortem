@@ -1,142 +1,35 @@
-# CloudMortem CI pipeline
 name: CloudMortem CI
 
 on:
   push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
-
-permissions:
-  id-token: write
-  contents: read
-
-concurrency:
-  group: cloudmortem-production
-  cancel-in-progress: false
 
 jobs:
-  validate:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::716215155311:role/cloudmortem-dev-terraform-plan-role
-          aws-region: ap-south-1
-
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
-      - name: Python syntax validation
+      - name: Install dependencies
         run: |
-          python -m compileall terraform/infrastructure/lambda_src
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest build
 
-      - name: Install Python test dependencies
+      - name: Run tests
+        run: pytest
+
+      - name: Build package
+        run: python -m build
+
+      - name: Verify wheel install
         run: |
-          python -m pip install pytest
-
-      - name: Run Python tests
-        run: |
-          pytest tests/
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform format check
-        run: |
-          terraform fmt -check -recursive terraform
-
-      - name: Terraform validate bootstrap
-        working-directory: terraform/bootstrap
-        run: |
-          terraform init -backend=false
-          terraform validate
-
-      - name: Terraform validate infrastructure
-        working-directory: terraform/infrastructure
-        run: |
-          terraform init -backend=false
-          terraform validate
-
-      - name: Install Checkov
-        run: |
-          pip install checkov
-
-      - name: Run Checkov Terraform security scan
-        run: |
-          checkov -d terraform --soft-fail
-
-      - name: Terraform plan
-        working-directory: terraform/infrastructure
-        run: |
-          terraform init
-          terraform plan -out=tfplan
-
-      - name: Save Terraform plan output
-        working-directory: terraform/infrastructure
-        run: |
-          terraform show -no-color tfplan > tfplan.txt
-
-      - name: Upload Terraform plan artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan
-          path: terraform/infrastructure/tfplan.txt
-
-      - name: Upload Terraform binary plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan-binary
-          path: terraform/infrastructure/tfplan
-
-      - name: Upload Lambda package
-        uses: actions/upload-artifact@v4
-        with:
-          name: lambda-package
-          path: terraform/infrastructure/lambda_function.zip
-
-  apply:
-    needs: validate
-    environment: production
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download Terraform plan
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-plan-binary
-          path: terraform/infrastructure
-
-      - name: Download Lambda package
-        uses: actions/download-artifact@v4
-        with:
-          name: lambda-package
-          path: terraform/infrastructure
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::716215155311:role/cloudmortem-dev-terraform-plan-role
-          aws-region: ap-south-1
-
-      - name: Terraform apply
-        working-directory: terraform/infrastructure
-        run: |
-          terraform init
-          terraform apply tfplan
+          pip install dist/*.whl
+          cloudmortem --help

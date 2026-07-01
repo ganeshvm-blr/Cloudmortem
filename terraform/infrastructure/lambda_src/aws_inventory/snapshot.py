@@ -18,13 +18,11 @@ def get_latest_snapshot(bucket_name):
     if not objects:
         return None
 
-
     latest = sorted(
         objects,
         key=lambda obj: obj["LastModified"],
         reverse=True,
     )[0]
-
 
     snapshot = s3_client.get_object(
         Bucket=bucket_name,
@@ -40,9 +38,7 @@ def save_snapshot(inventory, bucket_name):
 
     s3_client = boto3.client("s3")
 
-    timestamp = datetime.now(timezone.utc).strftime(
-        "%Y-%m-%dT%H-%M-%S"
-    )
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%S")
 
     key = f"inventory/{timestamp}.json"
 

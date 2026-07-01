@@ -4,26 +4,16 @@ def compare_resource_lists(
     identifier,
 ):
 
-    previous_map = {
-        item[identifier]: item
-        for item in previous
-    }
+    previous_map = {item[identifier]: item for item in previous}
 
-    current_map = {
-        item[identifier]: item
-        for item in current
-    }
+    current_map = {item[identifier]: item for item in current}
 
     created = [
-        current_map[key]
-        for key in current_map.keys()
-        if key not in previous_map
+        current_map[key] for key in current_map.keys() if key not in previous_map
     ]
 
     deleted = [
-        previous_map[key]
-        for key in previous_map.keys()
-        if key not in current_map
+        previous_map[key] for key in previous_map.keys() if key not in current_map
     ]
 
     return created, deleted
@@ -36,7 +26,6 @@ def compare_snapshots(previous, current):
         "deleted": [],
         "modified": [],
     }
-
 
     # S3 comparison
     s3_created, s3_deleted = compare_resource_lists(

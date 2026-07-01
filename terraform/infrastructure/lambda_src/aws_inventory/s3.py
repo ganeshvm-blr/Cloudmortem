@@ -10,22 +10,14 @@ def discover_s3():
     buckets = []
 
     for bucket in response.get("Buckets", []):
-
         name = bucket["Name"]
 
         try:
+            location = client.get_bucket_location(Bucket=name)
 
-            location = client.get_bucket_location(
-                Bucket=name
-            )
-
-            region = (
-                location.get("LocationConstraint")
-                or "us-east-1"
-            )
+            region = location.get("LocationConstraint") or "us-east-1"
 
         except Exception:
-
             region = "unknown"
 
         buckets.append(

@@ -22,9 +22,7 @@ def lambda_handler(event, context):
 
     bucket_name = os.environ["SNAPSHOT_BUCKET"]
 
-    previous_inventory = get_latest_snapshot(
-        bucket_name
-    )
+    previous_inventory = get_latest_snapshot(bucket_name)
 
     current_inventory = collect_inventory()
 
@@ -35,7 +33,6 @@ def lambda_handler(event, context):
     }
 
     if previous_inventory:
-
         changes = compare_snapshots(
             previous_inventory,
             current_inventory,
@@ -50,11 +47,6 @@ def lambda_handler(event, context):
 
     current_inventory["changes"] = changes
 
-    logger.info(
-        json.dumps(current_inventory)
-    )
+    logger.info(json.dumps(current_inventory))
 
-    return {
-        "statusCode": 200,
-        "body": json.dumps(current_inventory)
-    }
+    return {"statusCode": 200, "body": json.dumps(current_inventory)}

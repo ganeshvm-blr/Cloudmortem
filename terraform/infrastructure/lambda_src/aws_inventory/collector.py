@@ -16,11 +16,7 @@ def safe_discover(service_name, function):
         return function(), None
 
     except Exception as error:
-
-        logger.exception(
-            "%s discovery failed",
-            service_name
-        )
+        logger.exception("%s discovery failed", service_name)
 
         return [], {
             "service": service_name,
@@ -32,20 +28,11 @@ def collect_inventory():
 
     region = boto3.Session().region_name
 
-    ec2, ec2_error = safe_discover(
-        "ec2",
-        discover_ec2
-    )
+    ec2, ec2_error = safe_discover("ec2", discover_ec2)
 
-    lambdas, lambda_error = safe_discover(
-        "lambda",
-        discover_lambda
-    )
+    lambdas, lambda_error = safe_discover("lambda", discover_lambda)
 
-    s3, s3_error = safe_discover(
-        "s3",
-        discover_s3
-    )
+    s3, s3_error = safe_discover("s3", discover_s3)
 
     inventory = build_inventory(
         ec2,

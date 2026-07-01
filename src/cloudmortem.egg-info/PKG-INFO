@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: cloudmortem
+Version: 0.1.0
+Summary: CloudMortem - Service execution simulator CLI
+Author: CloudMortem Team
+Requires-Python: >=3.13
+Provides-Extra: build
+Requires-Dist: build; extra == "build"
+Requires-Dist: twine; extra == "build"

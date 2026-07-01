@@ -1,0 +1,2 @@
+[console_scripts]
+cloudmortem = cloudmortem.cli:main
