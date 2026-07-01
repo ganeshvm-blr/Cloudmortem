@@ -1,0 +1,32 @@
+* [33mecad7d9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add ADR for deployment concurrency protection
+* [33m12f071b[m Add ADR for infrastructure security scanning strategy
+* [33m27fe9d0[m Add ADR for immutable deployment artifacts
+* [33m192e4c0[m Add ADR for Terraform plan and apply separation
+* [33me983655[m Add initial architecture decision records
+* [33m3a6fc9a[m Add GitHub Actions concurrency protection for deployments
+* [33mf941952[m Add Checkov Terraform security scanning to CI pipeline
+* [33m328cf17[m Add CloudMortem architecture documentation
+* [33mbd3accb[m Update README with production CI/CD workflow documentation
+* [33mdcdea02[m Persist Lambda package between Terraform plan and apply
+* [33macc6ea1[m Add Terraform setup to apply job
+* [33me95ead1[m Add approved Terraform apply workflow
+* [33ma4ac999[m Upload Terraform binary plan artifact
+* [33m4802da1[m Add production approval environment gate
+* [33m15a4d50[m Upload Terraform plan as CI artifact
+* [33m963a49d[m Expand Terraform plan role permissions
+* [33m9998351[m Add Terraform plan step to CI workflow
+* [33md47eae7[m Enable GitHub Actions OIDC token permissions
+* [33me48181e[m Add GitHub Actions OIDC authentication for Terraform CI
+* [33m4d52409[m Convert drift tests to pytest and improve CI test execution
+* [33m0d628e8[m Migrate tests to pytest and update CI pipeline
+* [33mb6033d9[m Add drift detection example to README
+* [33m86cfb0b[m Document CloudMortem design decisions
+* [33mec1d28c[m Document repository structure
+* [33mb135cd1[m Document CI/CD workflow
+* [33ma00f180[m Improve README with problem statement and architecture overview
+* [33me599144[m Trigger CI after Terraform provider fix
+* [33mb5395e8[m Fix duplicate Terraform provider configuration
+* [33me5eabcd[m Add GitHub Actions CI validation pipeline
+* [33m04bc655[m Track Terraform provider lock files
+* [33m598d069[m Fix test imports after restructuring
+* [33m6134d4b[m Initial CloudMortem MVP: AWS inventory and drift detection
