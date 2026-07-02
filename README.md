@@ -176,12 +176,6 @@ Terraform Apply
 
 
 ---
-
-# 2. Add Security Model Section
-
-After Tech Stack, add:
-
-```markdown
 ## Security Model
 
 CloudMortem follows several cloud security principles.

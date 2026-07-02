@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List, Dict, Any
 
 
 @dataclass
@@ -6,11 +7,25 @@ class ServiceResult:
     message: str
 
 
+@dataclass
 class Success:
-    def __init__(self, value: ServiceResult):
-        self.value = value
+    value: ServiceResult
+    status: str = "success"
 
 
+@dataclass
 class Failure:
-    def __init__(self, error: str):
-        self.error = error
+    error: str
+    status: str = "error"
+
+
+@dataclass
+class InventoryItem:
+    service: str
+    resource: str
+    metadata: Dict[str, Any]
+
+
+@dataclass
+class InventorySnapshot:
+    items: List[InventoryItem]

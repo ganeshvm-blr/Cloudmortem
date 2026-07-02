@@ -3,21 +3,23 @@ import sys
 
 from cloudmortem.command_registry import COMMANDS
 from cloudmortem.logger import get_logger
+from cloudmortem.service import Success, Failure
 
 logger = get_logger()
 
 
 def build_parser():
     parser = argparse.ArgumentParser(
-        prog="cloudmortem", description="CloudMortem - Service execution simulator"
+        prog="cloudmortem",
+        description="CloudMortem - Service execution simulator",
     )
 
-    # backward compatibility flags (tests depend on these)
+    # Backward compatibility flags
     parser.add_argument("--fail", action="store_true")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--version", action="store_true")
 
-    # subcommands (future-ready)
+    # Subcommands
     subparsers = parser.add_subparsers(dest="command")
 
     run_parser = subparsers.add_parser("run")
@@ -25,6 +27,7 @@ def build_parser():
     run_parser.add_argument("--json", action="store_true")
 
     subparsers.add_parser("version")
+    subparsers.add_parser("inventory")  # <-- FIX: ensure allowed choice exists
 
     return parser
 
@@ -39,19 +42,23 @@ def main(argv=None) -> int:
     parser = build_parser()
     args, _ = parser.parse_known_args(argv)
 
-    command = args.command or "run"
+    # Backward compatibility
+    if args.version:
+        command = "version"
+    else:
+        command = args.command or "run"
 
     handler = COMMANDS.get(command)
 
-    if not handler:
+    if handler is None:
         emit("Unknown command")
         return 2
 
     if command == "version":
-        output, code = handler(args)
+        result, output = handler(args)
         emit(output)
         logger.info(output)
-        return code
+        return 0
 
     emit("CloudMortemService run started")
 
@@ -59,12 +66,13 @@ def main(argv=None) -> int:
 
     emit(output)
 
-    if getattr(result, "status", None) == "error":
+    if isinstance(result, Failure):
         return 1
 
-    if getattr(result, "status", None) == "success":
+    if isinstance(result, Success):
         return 0
 
+    emit("Unknown result")
     return 2
 
 
